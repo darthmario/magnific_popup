@@ -133,33 +133,35 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
           $classes = array();
           // Determine the file's info and store it.
           $thumbnail_path = FALSE;
+          $thumbnail_style = '';
           // Determine if the URL is an external URL.
           $is_external_url = FALSE;
           // MediaYouTubeStreamWrapper implements getLocalThumbnailPath() to
           // find the thumbnail path.
           if (method_exists($wrapper,'getLocalThumbnailPath')) {
             $thumbnail_path = $wrapper->getLocalThumbnailPath();
+            $is_external_url = TRUE;
           }
-          elseif (!empty($displays[$entity_id]) && !empty($displays[$entity_id]['settings'])) {
+          else if (!empty($displays[$entity_id]) && !empty($displays[$entity_id]['settings'])) {
             $current_display = $displays[$entity_id]['settings'];
             $thumbnail_field_name = !empty($current_display['thumbnail_field']) ? $current_display['thumbnail_field'] : '';
             // Skip all the lookups necessary for a custom thumbnail that is
             // really just a circular reference.
             if ($thumbnail_field_name === $field['field_name']) {
-              $thumbnail_field_name = '';
+              $thumbnail_path = $wrapper->getUri();
             }
-            if (!empty($thumbnail_field_name) && !empty($entities[$entity_id])) {
+            else if (!empty($thumbnail_field_name) && !empty($entities[$entity_id])) {
               $thumbnail_field_item = field_get_items($entity_type, $entities[$entity_id], $thumbnail_field_name, NULL);
               $thumbnail_path = $thumbnail_field_item[0]['uri'];
             }
             $thumbnail_style = (!empty($current_display['thumbnail_style'])) ? $current_display['thumbnail_style'] : '';
             $classes[] = 'mfp-custom-thumbnail';
             // If a thumbnail was not provided, use the default thumbnail.
-            if (empty($thumbnail_path) && function_exists('oembed_get_data')) {
-              $is_external_url = TRUE;
+            if (file_uri_scheme($thumbnail_path) === 'oembed' && function_exists('oembed_get_data')) {
               // Get oembed data
               $oembed_data = oembed_get_data($wrapper->getExternalUrl());
               if (!empty($oembed_data) && !empty($oembed_data['thumbnail_url'])) {
+                $is_external_url = TRUE;
                 $thumbnail_path = '//' . file_uri_target($oembed_data['thumbnail_url']);
               }
             }
@@ -170,14 +172,14 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
               $thumbnail_path = $uri;
             }
           }
-          // Adjust $thumbnail_path based on the $scheme.
+          // Default $thumbnail_path based on the $scheme.
           if (empty($thumbnail_style)) {
             $thumbnail_style = 'magnific_popup_thumbnail';
             if (!empty($thumbnail_schemes[$scheme])) {
               $thumbnail_style = $thumbnail_schemes[$scheme];
             }
           }
-          // Do not request image style URLs for external URLs
+          // Do not request image style URLs for externally-derived thumbs.
           if (!$is_external_url) {
             $thumbnail_path = image_style_url($thumbnail_style, $thumbnail_path);
           }
