@@ -132,7 +132,7 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
           $wrapper = $wrappers[$scheme];
           $classes = array();
           // Determine the file's info and store it.
-          $thumbnail_path = FALSE;
+          $thumbnail_path = $wrapper->getUri();
           $thumbnail_style = '';
           // Determine if the URL is an external URL.
           $is_external_url = FALSE;
@@ -145,20 +145,19 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
           else if (!empty($displays[$entity_id]) && !empty($displays[$entity_id]['settings'])) {
             $current_display = $displays[$entity_id]['settings'];
             $thumbnail_field_name = !empty($current_display['thumbnail_field']) ? $current_display['thumbnail_field'] : '';
-            // Skip all the lookups necessary for a custom thumbnail that is
-            // really just a circular reference.
-            if ($thumbnail_field_name === $field['field_name']) {
-              $thumbnail_path = $wrapper->getUri();
-            }
-            else if (!empty($thumbnail_field_name) && !empty($entities[$entity_id])) {
+            if (!empty($thumbnail_field_name) && !empty($entities[$entity_id])) {
               $thumbnail_field_item = field_get_items($entity_type, $entities[$entity_id], $thumbnail_field_name, NULL);
-              $thumbnail_path = $thumbnail_field_item[0]['uri'];
+              // Only override the thumbnail if we have an actual thumbnail to
+              // use instead (the field override may be empty!).
+              if (!empty($thumbnail_field_item[0]['uri'])) {
+                $thumbnail_path = $thumbnail_field_item[0]['uri'];
+              }
             }
             $thumbnail_style = (!empty($current_display['thumbnail_style'])) ? $current_display['thumbnail_style'] : '';
             $classes[] = 'mfp-custom-thumbnail';
             // If a thumbnail was not provided, use the default thumbnail.
             if (file_uri_scheme($thumbnail_path) === 'oembed' && function_exists('oembed_get_data')) {
-              // Get oembed data
+              // Get oembed data.
               $oembed_data = oembed_get_data($wrapper->getExternalUrl());
               if (!empty($oembed_data) && !empty($oembed_data['thumbnail_url'])) {
                 $is_external_url = TRUE;
