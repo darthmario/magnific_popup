@@ -40,7 +40,7 @@
       var common_options = settings.magnific_popup.common_options || {};
       var common_options_iframe = settings.magnific_popup.common_options_iframe || {};
       // Allow modules to extend the set of patterns we support via iframe.
-      if (settings.magnific_popup_api.iframe_patterns) {
+      if (settings.magnific_popup_api && settings.magnific_popup_api.iframe_patterns) {
         jQuery.extend(settings.magnific_popup.common_options_iframe.iframe.patterns, settings.magnific_popup_api.iframe_patterns);
         // There are some bugs around the delete operator, so make sure we never
         // double-up on iframe patterns.
