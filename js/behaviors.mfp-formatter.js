@@ -55,7 +55,7 @@
         type: 'image',
         image: {
           titleSrc: function (item) {
-            return $('img.mfp-thumbnail', item.el).attr('title') || '';
+            return $('img.mfp-thumbnail,span.mfp-title', item.el).attr('title') || '';
           }
         }
       };

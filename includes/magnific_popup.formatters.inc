@@ -275,6 +275,11 @@ function magnific_popup_field_formatter_view($entity_type, $entity, $field, $ins
       $popup_gallery['item-' . $delta]['#text'] = render($image);
     }
     else {
+      // Normally the title comes from img.mfp-thumbnail's title attribute.
+      // Since this a.mfp-item will not have a thumbnail image, add the title to
+      // a special span.mfp-title's title attribute.
+      $popup_gallery['item-' . $delta]['#text'] = t('<span class="mfp-title" title="@title">&nbsp;</span>', array('@title' => $item['title']));
+      // Hide the a.mfp-item (and any span.mfp-title).
       $popup_gallery['item-' . $delta]['#options']['attributes']['style'][] = 'display: none;';
     }
   }
