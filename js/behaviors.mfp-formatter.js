@@ -15,7 +15,7 @@
       patterns: {
         youtube_short: {
           index: 'youtu.be/',
-          id: function(url) {
+          id: function (url) {
             var videoID = '';
             var videoStart = 0;
             // Get video ID and T param (if it exists).
@@ -35,8 +35,11 @@
     }
   };
   Drupal.behaviors.magnific_popup = {
-		attach: function (context, settings) {
-      settings.magnific_popup = settings.magnific_popup || { common_options: {}, common_options_iframe: {}};
+    attach: function (context, settings) {
+      settings.magnific_popup = settings.magnific_popup || {
+          common_options: {},
+          common_options_iframe: {}
+        };
       var common_options = settings.magnific_popup.common_options || {};
       var common_options_iframe = settings.magnific_popup.common_options_iframe || {};
       // Allow modules to extend the set of patterns we support via iframe.
@@ -51,7 +54,7 @@
       var common_options_image = {
         type: 'image',
         image: {
-          titleSrc: function(item) {
+          titleSrc: function (item) {
             return $('img.mfp-thumbnail', item.el).attr('title') || '';
           }
         }
@@ -71,15 +74,15 @@
       // Instantiate galleries, images.
       options = {};
       $.extend(options, common_options, common_options_image, common_options_gallery);
-      $('.mfp-gallery-image', context).once('magnific_popup').each(function(el, i) {
+      $('.mfp-gallery-image', context).once('magnific_popup').each(function (el, i) {
         $(this).magnificPopup(options);
       });
       // Instantiate galleries, iframes.
       options = {};
       $.extend(options, common_options, common_options_iframe, common_options_gallery);
-      $('.mfp-gallery-iframe', context).once('magnific_popup').each(function(el, i) {
+      $('.mfp-gallery-iframe', context).once('magnific_popup').each(function (el, i) {
         $(this).magnificPopup(options);
       });
     }
-  };
+  }
 })(jQuery);
