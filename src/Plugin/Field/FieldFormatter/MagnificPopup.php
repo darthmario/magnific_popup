@@ -165,7 +165,7 @@ class MagnificPopup extends ImageFormatterBase {
     return [
       'all_items' => t('Gallery: All Items Displayed'),
       'first_item' => t('Gallery: First Item Displayed'),
-      //'random_item' => t('Gallery: Random Item Displayed'),
+      // 'random_item' => t('Gallery: Random Item Displayed'),
       'separate_items' => t('No Gallery: Display Each Item Separately'),
     ];
   }

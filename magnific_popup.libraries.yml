@@ -12,3 +12,9 @@ magnific_popup:
   dependencies:
     - core/jquery
     - core/jquery.once
+video_embed_field:
+  js:
+    js/magnific-popup.video-embed.js: {}
+  css:
+    theme:
+      css/magnific-popup.video-embed.css: {}
