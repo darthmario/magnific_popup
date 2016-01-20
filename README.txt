@@ -1,4 +1,4 @@
-Drupal Magnific Popup Module:
+Drupal Magnific Popup 8.x Module:
 -----------------------------
 Maintainers:
     Eric Goodwin (https://www.drupal.org/user/2877061)
@@ -41,7 +41,10 @@ Features:
 Installation:
 -------------
 1. Download a 1.x magnific popup release from https://github.com/dimsemenov/Magnific-Popup/releases.
-2. Copy the contents of the "dist" folder into DRUPAL_ROOT/libraries/magnific_popup.
+2. Copy the contents of the "dist" folder into DRUPAL_ROOT/libraries/magnific-popup.
+   To be correctly detected and used, the JS and CSS must be located at these paths:
+    * libraries/magnific-popup/jquery.magnific-popup.min.js
+    * libraries/magnific-popup/magnific-popup.css
 3. You can check that the library is install correctly by checking the status report
    for your drupal installation at /admin/reports/status.
 4. Enable the magnific_popup module and select it as the display formatter
