@@ -22,7 +22,7 @@ function magnific_popup_requirements($phase) {
     else {
       $requirements['magnific_popup']['value'] = t('Not Installed');
       $requirements['magnific_popup']['severity'] = REQUIREMENT_ERROR;
-      $requirements['magnific_popup']['description'] = t('Please download the Magnific Popup Library from :url.', [':url' => 'https://github.com/dimsemenov/Magnific-Popup/releases']);
+      $requirements['magnific_popup']['description'] = t('Please download the Magnific Popup Library from :url and copy the contents of the "dist" folder to DRUPAL_ROOT/libraries/magnific_popup.', [':url' => 'https://github.com/dimsemenov/Magnific-Popup/releases']);
     }
   }
 
