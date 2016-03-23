@@ -8,6 +8,29 @@
     preloader: false,
     fixedContentPos: 'auto'
   };
+  var youtube_id = function (url) {
+    // Get video ID and extra params (if they exist).
+    // Example URLs:
+    //  http://www.youtube.com/watch?v=VIDEOID&t=60&list=PLAYLISTID
+    //  https://www.youtube.com/v/VIDEOID?t=60&list=PLAYLISTID
+    //  https://www.youtube.com/embed/VIDEOID?t=60&list=PLAYLISTID
+    //  https://youtu.be/VIDEOID?t=60&list=PLAYLISTID
+    var video_ID = /(youtu\.be\/|youtube\.com\/(embed|v)\/|watch\?v=)([a-zA-Z0-9_-]+)/.exec(url);
+    if (typeof video_ID[3] === 'undefined') {
+      return false;
+    }
+    var video_params_test = /\?+(.+)/.exec(url), video_params = '';
+    if (typeof video_params_test[1] !== 'undefined') {
+      video_params = '&' + video_params_test[1];
+      // Remove redundant video param, if it exists.
+      video_params = video_params.replace(/&v=.*?(?=$|&)/gi, '');
+      // Remove autoplay param, if it exists.
+      video_params = video_params.replace(/&autoplay=.*?(?=$|&)/gi, '');
+      // Convert "t" to "start" param.
+      video_params = video_params.replace(/&t=/gi, '&start=');
+    }
+    return video_ID[3] + '?autoplay=1' + video_params;
+  };
   Drupal.settings.magnific_popup.common_options_iframe = {
     type: 'iframe',
     iframe: {
@@ -15,20 +38,14 @@
       patterns: {
         youtube_short: {
           index: 'youtu.be/',
-          id: function (url) {
-            var videoID = '';
-            var videoStart = 0;
-            // Get video ID and T param (if it exists).
-            var ytv = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*)(?:(\?t|&start)=(\d+))?.*/g;
-            var youtubeURL = ytv.exec(url);
-            if (typeof youtubeURL[2] !== 'undefined') {
-              videoID = youtubeURL[2];
-            }
-            if (typeof youtubeURL[4] !== 'undefined') {
-              videoStart = youtubeURL[4];
-            }
-            return videoID + '?start=' + videoStart + '&autoplay=1';
-          },
+          id: youtube_id,
+          src: '//www.youtube.com/embed/%id%'
+        },
+        // To override the default "youtube" handler, we need to name ours the
+        // same.
+        youtube: {
+          index: 'www.youtube.com/',
+          id: youtube_id,
           src: '//www.youtube.com/embed/%id%'
         }
       }
