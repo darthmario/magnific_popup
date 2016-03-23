@@ -20,7 +20,7 @@
       return false;
     }
     var video_params_test = /\?+(.+)/.exec(url), video_params = '';
-    if (typeof video_params_test[1] !== 'undefined') {
+    if (!!video_params_test && typeof video_params_test[1] !== 'undefined') {
       video_params = '&' + video_params_test[1];
       // Remove redundant video param, if it exists.
       video_params = video_params.replace(/&v=.*?(?=$|&)/gi, '');
