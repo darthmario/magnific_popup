@@ -1,11 +1,11 @@
-(function($, Drupal, drupalSettings) {
+(function ($, Drupal, drupalSettings) {
 
   "use strict";
 
   Drupal.behaviors.magnific_popup = {
-    attach: function(context, settings) {
+    attach: function (context, settings) {
       // Gallery.
-      $(context).find('.mfp-all-items, .mfp-first-item, .mfp-random-item').once('mfp-processed').each(function() {
+      $(context).find('.mfp-all-items, .mfp-first-item, .mfp-random-item').once('mfp-processed').each( function() {
         $(this).magnificPopup({
           delegate: 'a',
           type: 'image',
@@ -13,18 +13,22 @@
             enabled: true
           },
           image: {
-            titleSrc: 'alt'
+            titleSrc: function (item) {
+              return item.img.attr('alt') || '';
+            }
           }
         });
       });
 
       // Separate items.
-      $(context).find('.mfp-separate-items').once('mfp-processed').each(function() {
+      $(context).find('.mfp-separate-items').once('mfp-processed').each(function () {
         $(this).magnificPopup({
           delegate: 'a',
           type: 'image',
           image: {
-            titleSrc: 'alt'
+            titleSrc: function (item) {
+              return item.img.attr('alt') || '';
+            }
           }
         });
       });

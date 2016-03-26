@@ -113,30 +113,21 @@ class MagnificPopup extends ImageFormatterBase {
       $item_attributes['class'][] = 'mfp-thumbnail';
 
       if ($gallery_type === 'first_item' && $delta > 0) {
-        $elements[$delta] = [
-          '#theme' => 'image_formatter',
-          '#url' => $url,
-          '#attached' => [
-            'library' => [
-              'magnific_popup/magnific_popup',
-            ],
-          ],
-        ];
+        $item_attributes['class'][] = 'visually-hidden';
       }
-      else {
-        $elements[$delta] = [
-          '#theme' => 'image_formatter',
-          '#item' => $item,
-          '#item_attributes' => $item_attributes,
-          '#image_style' => $thumb_image_style,
-          '#url' => $url,
-          '#attached' => [
-            'library' => [
-              'magnific_popup/magnific_popup',
-            ],
+
+      $elements[$delta] = [
+        '#theme' => 'image_formatter',
+        '#item' => $item,
+        '#item_attributes' => $item_attributes,
+        '#image_style' => $thumb_image_style,
+        '#url' => $url,
+        '#attached' => [
+          'library' => [
+            'magnific_popup/magnific_popup',
           ],
-        ];
-      }
+        ],
+      ];
     }
 
     return $elements;
