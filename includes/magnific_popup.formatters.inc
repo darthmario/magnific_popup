@@ -145,7 +145,9 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
           else if (!empty($displays[$entity_id]) && !empty($displays[$entity_id]['settings'])) {
             $current_display = $displays[$entity_id]['settings'];
             $thumbnail_field_name = !empty($current_display['thumbnail_field']) ? $current_display['thumbnail_field'] : '';
-            if (!empty($thumbnail_field_name) && !empty($entities[$entity_id])) {
+            // Check for thumbnail overrides (where a different field is used
+            // to derive thumbnails).
+            if (!empty($thumbnail_field_name) && $thumbnail_field_name !== $field['field_name'] && !empty($entities[$entity_id])) {
               $thumbnail_field_item = field_get_items($entity_type, $entities[$entity_id], $thumbnail_field_name, NULL);
               // Only override the thumbnail if we have an actual thumbnail to
               // use instead (the field override may be empty!).
