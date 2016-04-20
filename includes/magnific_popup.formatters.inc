@@ -149,8 +149,8 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
               $thumbnail_field_item = field_get_items($entity_type, $entities[$entity_id], $thumbnail_field_name, NULL);
               // Only override the thumbnail if we have an actual thumbnail to
               // use instead (the field override may be empty!).
-              if (!empty($thumbnail_field_item[0]['uri'])) {
-                $thumbnail_path = $thumbnail_field_item[0]['uri'];
+              if (!empty($thumbnail_field_item[$delta]['uri'])) {
+                $thumbnail_path = $thumbnail_field_item[$delta]['uri'];
               }
             }
             $thumbnail_style = (!empty($current_display['thumbnail_style'])) ? $current_display['thumbnail_style'] : '';
