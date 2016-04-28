@@ -31,12 +31,12 @@
       // Adjust "start" param; the YT share GUI generates URLs like ?t=1h2m3s
       // but the embed endpoint requires time in seconds with no units or text
       // chars of any kind.
-      var start_times = /&start=(\d+h)?(\d+m)?(\d+s)?/i.exec(video_params);
-      if (start_times && start_times.length) {
+      var start_times = /&start=((\d+h)?(\d+m)?(\d+s)?)/i.exec(video_params);
+      if (start_times && start_times.length && start_times[1] !== '') {
         var time = 0;
-        for (var i = 1; i < start_times.length; ++i) {
+        for (var i = 2; i < start_times.length; ++i) {
           if (typeof start_times[i] !== 'undefined') {
-            time += parseInt(start_times[i]) * Math.pow(60, 3 - i);
+            time += parseInt(start_times[i]) * Math.pow(60, 4 - i);
           }
         }
         video_params = video_params.replace(/&start=.*?(?=$|&)/gi, '&start=' + time);
