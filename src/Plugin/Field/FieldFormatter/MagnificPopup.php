@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\magnific_popup\Plugin\Field\FieldFormatter\MagnificPopup.
- */
-
 namespace Drupal\magnific_popup\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Form\FormStateInterface;

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\magnific_popup\Plugin\Field\FieldFormatter\VideoEmbedField.
- */
-
 namespace Drupal\magnific_popup\Plugin\Field\FieldFormatter;
 
 use Drupal\video_embed_field\Plugin\Field\FieldFormatter\Colorbox;
