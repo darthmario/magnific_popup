@@ -41,23 +41,23 @@ class MagnificPopup extends ImageFormatterBase {
     $image_styles = image_style_options(FALSE);
 
     $form['thumbnail_image_style'] = [
-      '#title' => t('Thumbnail Image Style'),
+      '#title' => $this->t('Thumbnail Image Style'),
       '#type' => 'select',
       '#default_value' => $this->getSetting('thumbnail_image_style'),
-      '#empty_option' => t('None (original image)'),
+      '#empty_option' => $this->t('None (original image)'),
       '#options' => $image_styles,
     ];
 
     $form['popup_image_style'] = [
-      '#title' => t('Popup Image Style'),
+      '#title' => $this->t('Popup Image Style'),
       '#type' => 'select',
       '#default_value' => $this->getSetting('popup_image_style'),
-      '#empty_option' => t('None (original image)'),
+      '#empty_option' => $this->t('None (original image)'),
       '#options' => $image_styles,
     ];
 
     $form['gallery_type'] = [
-      '#title' => t('Gallery Type'),
+      '#title' => $this->t('Gallery Type'),
       '#type' => 'select',
       '#default_value' => $this->getSetting('gallery_type'),
       '#options' => $this->getGalleryTypes(),
@@ -74,7 +74,7 @@ class MagnificPopup extends ImageFormatterBase {
     $thumb_image_style = $this->getSetting('thumbnail_image_style');
     $popup_image_style = $this->getSetting('popup_image_style');
     // Check image styles exist or display 'Original Image'.
-    $summary[] = t('Thumbnail image style: @thumb_style. Popup image style: @popup_style', [
+    $summary[] = $this->t('Thumbnail image style: @thumb_style. Popup image style: @popup_style', [
       '@thumb_style' => isset($image_styles[$thumb_image_style]) ? $thumb_image_style : 'Original Image',
       '@popup_style' => isset($image_styles[$popup_image_style]) ? $popup_image_style : 'Original Image',
     ]);
@@ -148,9 +148,9 @@ class MagnificPopup extends ImageFormatterBase {
     // Render cache means 'random image' is only random the first time.
     // Disabled until a better solution is found.
     return [
-      'all_items' => t('Gallery: All Items Displayed'),
-      'first_item' => t('Gallery: First Item Displayed'),
-      'separate_items' => t('No Gallery: Display Each Item Separately'),
+      'all_items' => $this->t('Gallery: All Items Displayed'),
+      'first_item' => $this->t('Gallery: First Item Displayed'),
+      'separate_items' => $this->t('No Gallery: Display Each Item Separately'),
     ];
   }
 

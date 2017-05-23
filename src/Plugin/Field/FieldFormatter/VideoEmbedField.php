@@ -38,7 +38,7 @@ class VideoEmbedField extends Colorbox {
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $form = [
       'gallery_type' => [
-        '#title' => t('Gallery Type'),
+        '#title' => $this->t('Gallery Type'),
         '#type' => 'select',
         '#default_value' => $this->getSetting('gallery_type'),
         '#options' => $this->getGalleryTypes(),
@@ -122,9 +122,9 @@ class VideoEmbedField extends Colorbox {
    */
   protected function getGalleryTypes() {
     return [
-      'all_items' => t('Gallery: All Items Displayed'),
-      'first_item' => t('Gallery: First Item Displayed'),
-      'separate_items' => t('No Gallery: Display Each Item Separately'),
+      'all_items' => $this->t('Gallery: All Items Displayed'),
+      'first_item' => $this->t('Gallery: First Item Displayed'),
+      'separate_items' => $this->t('No Gallery: Display Each Item Separately'),
     ];
   }
 
