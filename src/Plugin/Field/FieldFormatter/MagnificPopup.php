@@ -7,7 +7,6 @@ use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatterBase;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Url;
-use Drupal\Core\Link;
 use Drupal\Component\Utility\Html;
 
 /**
@@ -151,8 +150,8 @@ class MagnificPopup extends ImageFormatterBase {
     return [
       'all_items' => t('Gallery: All Items Displayed'),
       'first_item' => t('Gallery: First Item Displayed'),
-      // 'random_item' => t('Gallery: Random Item Displayed'),
       'separate_items' => t('No Gallery: Display Each Item Separately'),
     ];
   }
+
 }
