@@ -15,7 +15,7 @@ function magnific_popup_requirements($phase) {
     $requirements['magnific_popup']['title'] = t('Magnific Popup Library');
 
     // Verify library files are present.
-    if (file_exists(DRUPAL_ROOT . '/libraries/magnific-popup/jquery.magnific-popup.min.js') && file_exists(DRUPAL_ROOT . '/libraries/magnific-popup/magnific-popup.css')) {
+    if (file_exists(DRUPAL_ROOT . '/libraries/magnific-popup/dist/jquery.magnific-popup.min.js') && file_exists(DRUPAL_ROOT . '/libraries/magnific-popup/dist/magnific-popup.css')) {
       $requirements['magnific_popup']['value'] = t('Installed');
       $requirements['magnific_popup']['severity'] = REQUIREMENT_OK;
     }

@@ -5,10 +5,10 @@ magnific_popup:
       name: MIT
   js:
     js/magnific-popup.js: {}
-    /libraries/magnific-popup/jquery.magnific-popup.min.js: {minified: true}
+    /libraries/magnific-popup/dist/jquery.magnific-popup.min.js: {minified: true}
   css:
     base:
-      /libraries/magnific-popup/magnific-popup.css: {}
+      /libraries/magnific-popup/dist/magnific-popup.css: {}
   dependencies:
     - core/drupal
     - core/jquery
