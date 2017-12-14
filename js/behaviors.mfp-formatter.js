@@ -108,7 +108,7 @@
       $.extend(options, common_options, common_options_image);
       $('.mfp-nogallery-image .mfp-item', context).once('magnific_popup').magnificPopup(options);
       // Instantiate no-gallery, iframes.
-      options = {}
+      options = {};
       $.extend(options, common_options, common_options_iframe);
       $('.mfp-nogallery-iframe .mfp-item', context).once('magnific_popup').magnificPopup(options);
       // Instantiate galleries, images.
