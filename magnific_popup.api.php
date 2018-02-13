@@ -6,7 +6,9 @@
  */
 
 /**
- * Define supported URI schemes that get a special thumbnail.
+ * Define default thumbnail styles for specific URI schemes.
+ *
+ * Overriden by per-field settings specifying a thumbnail style.
  */
 function hook_magnific_popup_thumbnail_schemes() {
   // Specify that "youtube://" URIs should get the special thumbnail image style
