@@ -156,7 +156,7 @@ class VideoEmbedField extends FormatterBase implements ContainerFactoryPluginInt
         $element[$delta] = [
           '#type' => 'container',
           '#attributes' => [
-            'data-mfp-video-embed' => (string) $this->renderer->renderRoot($videos[$delta]),
+            'data-mfp-video-embed' => (string) $this->renderer->renderPlain($videos[$delta]),
             'class' => ['mfp-video-embed-popup'],
           ],
           '#attached' => [
@@ -168,7 +168,7 @@ class VideoEmbedField extends FormatterBase implements ContainerFactoryPluginInt
         $element[$delta] = [
           '#type' => 'container',
           '#attributes' => [
-            'data-mfp-video-embed' => (string) $this->renderer->renderRoot($videos[$delta]),
+            'data-mfp-video-embed' => (string) $this->renderer->renderPlain($videos[$delta]),
             'class' => ['mfp-video-embed-popup'],
           ],
           '#attached' => [
