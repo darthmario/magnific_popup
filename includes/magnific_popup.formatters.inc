@@ -163,6 +163,9 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
               if (!empty($oembed_data) && !empty($oembed_data['thumbnail_url'])) {
                 $is_external_url = TRUE;
                 $thumbnail_path = '//' . file_uri_target($oembed_data['thumbnail_url']);
+                if (empty($item['title']) && !empty($oembed_data['title'])) {
+                  $item['title'] = $oembed_data['title'];
+                }
               }
             }
           }
