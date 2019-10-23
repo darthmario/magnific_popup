@@ -116,37 +116,32 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
       // Check if we've already parsed this fid, and build it if not.
       if (!isset($loaded_items[$item['fid']])) {
         $loaded_items[$item['fid']] = FALSE;
-        $scheme = file_uri_scheme($item['uri']);
+        $item_scheme = file_uri_scheme($item['uri']);
         // Attempt to re-use, or load from scratch, a wrapper for this scheme.
-        if (empty($wrappers[$scheme])) {
+        if (empty($wrappers[$item_scheme])) {
           // Create a new wrapper.
-          $wrappers[$scheme] = file_stream_wrapper_get_instance_by_uri($item['uri']);
+          $wrappers[$item_scheme] = file_stream_wrapper_get_instance_by_uri($item['uri']);
         }
         else {
           // Attempt to re-use an existing wrapper.
-          $wrappers[$scheme]->setUri($item['uri']);
+          $wrappers[$item_scheme]->setUri($item['uri']);
         }
-        // Check that the resource was accessible.
-        if ($wrappers[$scheme] && $wrappers[$scheme]->url_stat($item['uri'], STREAM_URL_STAT_QUIET) !== FALSE) {
-          $wrapper = $wrappers[$scheme];
+        // Check that the item itself is accessible.
+        if ($wrappers[$item_scheme] && $wrappers[$item_scheme]->url_stat($item['uri'], STREAM_URL_STAT_QUIET) !== FALSE) {
+          $item_wrapper = $wrappers[$item_scheme];
           $classes = array();
-          // Determine the file's info and store it.
-          $thumbnail_path = $wrapper->getUri();
+          $thumbnail_path = '';
           $thumbnail_style = '';
-          // Determine if the URL is an external URL.
+          // We'll need to determine if the thumbnail path is an external URL.
           $is_external_url = FALSE;
-          // MediaYouTubeStreamWrapper implements getLocalThumbnailPath() to
-          // find the thumbnail path.
-          if (method_exists($wrapper, 'getLocalThumbnailPath')) {
-            $thumbnail_path = $wrapper->getLocalThumbnailPath();
-            $is_external_url = TRUE;
-          }
-          elseif (!empty($displays[$entity_id]) && !empty($displays[$entity_id]['settings'])) {
+          // Check for display settings.
+          if (!empty($displays[$entity_id]) && !empty($displays[$entity_id]['settings'])) {
             $current_display = $displays[$entity_id]['settings'];
             $thumbnail_field_name = !empty($current_display['thumbnail_field']) ? $current_display['thumbnail_field'] : '';
             // Check for thumbnail overrides (where a different field is used
             // to derive thumbnails).
-            if (!empty($thumbnail_field_name) && $thumbnail_field_name !== $field['field_name'] && !empty($entities[$entity_id])) {
+            $valid_override_thumbnail = !empty($thumbnail_field_name) && $thumbnail_field_name !== $field['field_name'];
+            if ($valid_override_thumbnail && !empty($entities[$entity_id])) {
               $thumbnail_field_item = field_get_items($entity_type, $entities[$entity_id], $thumbnail_field_name, NULL);
               // Only override the thumbnail if we have an actual thumbnail to
               // use instead (the field override may be empty!).
@@ -156,10 +151,26 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
             }
             $thumbnail_style = (!empty($current_display['thumbnail_style'])) ? $current_display['thumbnail_style'] : '';
             $classes[] = 'mfp-custom-thumbnail';
-            // If a thumbnail was not provided, use the default thumbnail.
-            if (file_uri_scheme($thumbnail_path) === 'oembed' && function_exists('oembed_get_data')) {
+          }
+          // If we don't have an override thumbnail_path, pull it from the item
+          // itself.
+          if (empty($thumbnail_path)) {
+            // MediaYouTubeStreamWrapper implements getLocalThumbnailPath() to
+            // get the thumbnail path. Otherwise use getUri().
+            if (method_exists($item_wrapper, 'getLocalThumbnailPath')) {
+              $thumbnail_path = $item_wrapper->getLocalThumbnailPath();
+            }
+            else {
+              $thumbnail_path = $item_wrapper->getUri();
+            }
+          }
+          // Handle the determined thumbnail path (could be external, oembed,
+          // etc.).
+          if (!empty($thumbnail_path)) {
+            $thumbnail_scheme = file_uri_scheme($thumbnail_path);
+            if ($thumbnail_scheme === 'oembed' && function_exists('oembed_get_data')) {
               // Get oembed data.
-              $oembed_data = oembed_get_data($wrapper->getExternalUrl());
+              $oembed_data = oembed_get_data($item_wrapper->getExternalUrl());
               if (!empty($oembed_data) && !empty($oembed_data['thumbnail_url'])) {
                 $is_external_url = TRUE;
                 $thumbnail_path = '//' . file_uri_target($oembed_data['thumbnail_url']);
@@ -169,17 +180,11 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
               }
             }
           }
-          // Try the standard method to get a thumbnail.
-          else {
-            if ($uri = $wrapper->getUri()) {
-              $thumbnail_path = $uri;
-            }
-          }
-          // Default $thumbnail_path based on the $scheme.
+          // Default $thumbnail_path based on the $item_scheme.
           if (empty($thumbnail_style)) {
             $thumbnail_style = 'magnific_popup_thumbnail';
-            if (!empty($thumbnail_schemes[$scheme])) {
-              $thumbnail_style = $thumbnail_schemes[$scheme];
+            if (!empty($thumbnail_schemes[$item_scheme])) {
+              $thumbnail_style = $thumbnail_schemes[$item_scheme];
             }
           }
           // Do not request image style URLs for externally-derived thumbs.
@@ -195,7 +200,7 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
             'title' => $title,
             'alt' => $alt,
             'thumbnail_path' => $thumbnail_path,
-            'target_uri' => $wrapper->getExternalUrl(),
+            'target_uri' => $item_wrapper->getExternalUrl(),
             'classes' => $classes,
           ) + $item;
           $loaded_items[$item['fid']] = $gallery_item;
