@@ -101,7 +101,7 @@
       };
       var common_options_gallery = {
         gallery: {enabled: true},
-        delegate: 'a'
+        delegate: 'a.mfp-item'
       };
       // Instantiate no-gallery, images.
       var options = {};
