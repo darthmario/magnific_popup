@@ -54,6 +54,15 @@
     }
     return video_ID[3] + '?autoplay=1' + video_params;
   };
+  var iframeElementParse = function(item) {
+    // Check for oEmbed HTML IFRAME.
+    if (item.el.length && item.el[0].hasAttribute('oembed') && item.el.attr('oembed').indexOf('src=') > 0) {
+      var src = $(item.el.attr('oembed')).attr('src');
+      if (src && src.length) {
+        item.src = src;
+      }
+    }
+  };
   Drupal.settings.magnific_popup.common_options_iframe = {
     type: 'iframe',
     iframe: {
@@ -72,6 +81,9 @@
           src: '//www.youtube.com/embed/%id%'
         }
       }
+    },
+    callbacks: {
+      elementParse: iframeElementParse
     }
   };
   Drupal.behaviors.magnific_popup = {

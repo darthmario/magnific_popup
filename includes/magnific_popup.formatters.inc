@@ -164,13 +164,28 @@ function magnific_popup_field_formatter_prepare_view($entity_type, $entities, $f
               $thumbnail_path = $item_wrapper->getUri();
             }
           }
+          // Get oEmbed data for the item.
+          $oembed_data = NULL;
+          if ($item_scheme === 'oembed' && function_exists('oembed_get_data')) {
+            // Get oembed data.
+            $oembed_data = oembed_get_data($item_wrapper->getExternalUrl());
+            if (!empty($oembed_data) && !empty($oembed_data['html'])) {
+              $item['oembed_html'] = $oembed_data['html'];
+            }
+          }
           // Handle the determined thumbnail path (could be external, oembed,
           // etc.).
           if (!empty($thumbnail_path)) {
             $thumbnail_scheme = file_uri_scheme($thumbnail_path);
-            if ($thumbnail_scheme === 'oembed' && function_exists('oembed_get_data')) {
-              // Get oembed data.
-              $oembed_data = oembed_get_data($item_wrapper->getExternalUrl());
+            if ($thumbnail_scheme === 'oembed') {
+              // Check if the thumbnail is the same as the item, to avoid
+              // redundant oembed calls.
+              if ($thumbnail_path !== $item['uri'] && function_exists('oembed_get_data')) {
+                if ($wrapper = file_stream_wrapper_get_instance_by_uri($thumbnail_path)) {
+                  $oembed_data = oembed_get_data($wrapper->getExternalUrl());
+                }
+              }
+              // Use oembed data.
               if (!empty($oembed_data) && !empty($oembed_data['thumbnail_url'])) {
                 $is_external_url = TRUE;
                 $thumbnail_path = '//' . file_uri_target($oembed_data['thumbnail_url']);
@@ -263,6 +278,9 @@ function magnific_popup_field_formatter_view($entity_type, $entity, $field, $ins
         'html' => TRUE,
       ),
     );
+    if (!empty($item['oembed_html'])) {
+      $popup_gallery['item-' . $delta]['#options']['attributes']['oembed'] = $item['oembed_html'];
+    }
     $popup_gallery['item-' . $delta]['#options']['attributes']['class'][] = 'mfp-item';
     // This item has a thumbnail image if:
     // - the Gallery Type is "all items" (because all items have thumbs), or
