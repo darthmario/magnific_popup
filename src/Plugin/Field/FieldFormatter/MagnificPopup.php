@@ -30,6 +30,7 @@ class MagnificPopup extends ImageFormatterBase {
       'thumbnail_image_style' => '',
       'popup_image_style' => '',
       'gallery_type' => 'all_items',
+      'vertical_fit' => 'true',
     ];
   }
 
@@ -61,6 +62,13 @@ class MagnificPopup extends ImageFormatterBase {
       '#type' => 'select',
       '#default_value' => $this->getSetting('gallery_type'),
       '#options' => $this->getGalleryTypes(),
+    ];
+
+    $form['vertical_fit'] = [
+      '#title' => $this->t('Vertical Fit'),
+      '#type' => 'select',
+      '#default_value' => $this->getSetting('vertical_fit'),
+      '#options' => $this->getVerticalFit(),
     ];
 
     return $form;
@@ -133,8 +141,11 @@ class MagnificPopup extends ImageFormatterBase {
   public function view(FieldItemListInterface $items, $langcode = NULL) {
     $elements = parent::view($items, $langcode);
     $gallery_type = $this->getSetting('gallery_type');
+    $vertical_fit = $this->getSetting('vertical_fit');
+
     $elements['#attributes']['class'][] = 'mfp-field';
     $elements['#attributes']['class'][] = 'mfp-' . Html::cleanCssIdentifier($gallery_type);
+    $elements['#attributes']['data-vertical-fit'][] = "$vertical_fit";
     return $elements;
   }
 
@@ -151,6 +162,19 @@ class MagnificPopup extends ImageFormatterBase {
       'all_items' => $this->t('Gallery: All Items Displayed'),
       'first_item' => $this->t('Gallery: First Item Displayed'),
       'separate_items' => $this->t('No Gallery: Display Each Item Separately'),
+    ];
+  }
+
+  /**
+   * Get an array of vertical fit values.
+   *
+   * @return array
+   *   An array of values settings.
+   */
+  protected function getVerticalFit() {
+    return [
+      'true' => 'Fit image vertically (suitable for most images)',
+      'false' => 'Fit image horizontally (suitable for very tall images)',
     ];
   }
 
