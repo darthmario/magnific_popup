@@ -99,7 +99,7 @@ class VideoEmbedField extends FormatterBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     $default_settings = [
       'gallery_type' => 'all_items',
     ];
@@ -110,7 +110,7 @@ class VideoEmbedField extends FormatterBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $form = [
       'gallery_type' => [
         '#title' => $this->t('Gallery Type'),
@@ -126,7 +126,7 @@ class VideoEmbedField extends FormatterBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $summary[] = $this->t('Thumbnail that opens a popup.');
     return $summary;
   }
@@ -134,7 +134,7 @@ class VideoEmbedField extends FormatterBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public function view(FieldItemListInterface $items, $langcode = NULL) {
+  public function view(FieldItemListInterface $items, $langcode = NULL): array {
     $elements = parent::view($items, $langcode);
     $gallery_type = $this->getSetting('gallery_type');
     $elements['#attributes']['class'][] = 'mfp-field';
@@ -145,7 +145,7 @@ class VideoEmbedField extends FormatterBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $element = [];
     $gallery_type = $this->getSetting('gallery_type');
     $thumbnails = $this->thumbnailFormatter->viewElements($items, $langcode);
@@ -185,7 +185,7 @@ class VideoEmbedField extends FormatterBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public static function isApplicable(FieldDefinitionInterface $field_definition) {
+  public static function isApplicable(FieldDefinitionInterface $field_definition): bool {
     return \Drupal::moduleHandler()->moduleExists('video_embed_field');
   }
 
@@ -195,7 +195,7 @@ class VideoEmbedField extends FormatterBase implements ContainerFactoryPluginInt
    * @return array
    *   An array of gallery types for use in display settings.
    */
-  protected function getGalleryTypes() {
+  protected function getGalleryTypes(): array {
     return [
       'all_items' => $this->t('Gallery: All Items Displayed'),
       'first_item' => $this->t('Gallery: First Item Displayed'),

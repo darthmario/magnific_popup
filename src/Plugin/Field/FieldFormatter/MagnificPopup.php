@@ -2,12 +2,13 @@
 
 namespace Drupal\magnific_popup\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatterBase;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Magnific Popup field formatter.
@@ -23,9 +24,33 @@ use Drupal\Component\Utility\Html;
 class MagnificPopup extends ImageFormatterBase {
 
   /**
+   * The file URL generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected FileUrlGeneratorInterface $fileUrlGenerator;
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected EntityTypeManagerInterface $entityTypeManager;
+
+  /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->fileUrlGenerator = $container->get('file_url_generator');
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    return $instance;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultSettings(): array {
     return [
       'thumbnail_image_style' => '',
       'popup_image_style' => '',
@@ -37,7 +62,7 @@ class MagnificPopup extends ImageFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $form = parent::settingsForm($form, $form_state);
     $image_styles = image_style_options(FALSE);
 
@@ -77,7 +102,7 @@ class MagnificPopup extends ImageFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
+  public function settingsSummary(): array {
     $image_styles = image_style_options(FALSE);
     $thumb_image_style = $this->getSetting('thumbnail_image_style');
     $popup_image_style = $this->getSetting('popup_image_style');
@@ -93,7 +118,7 @@ class MagnificPopup extends ImageFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = [];
     $thumb_image_style = $this->getSetting('thumbnail_image_style');
     $popup_image_style = $this->getSetting('popup_image_style');
@@ -102,12 +127,8 @@ class MagnificPopup extends ImageFormatterBase {
 
     foreach ($files as $delta => $file) {
       $image_uri = $file->getFileUri();
-      $popup_image_path = !empty($popup_image_style) ? ImageStyle::load($popup_image_style)->buildUrl($image_uri) : $image_uri;
-      // Depending on the outcome of https://www.drupal.org/node/2622586,
-      // Either a class will need to be added to the $url object,
-      // Or a custom theme function might be needed to do so.
-      // For the time being, 'a' is used as the delegate in magnific-popup.js.
-      $url = \Drupal::service('file_url_generator')->generate($popup_image_path);
+      $popup_image_path = !empty($popup_image_style) ? $this->entityTypeManager->getStorage('image_style')->load($popup_image_style)->buildUrl($image_uri) : $image_uri;
+      $url = $this->fileUrlGenerator->generate($popup_image_path);
       $item = $file->_referringItem;
       $item_attributes = $file->_attributes;
       unset($file->_attributes);
@@ -138,7 +159,7 @@ class MagnificPopup extends ImageFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function view(FieldItemListInterface $items, $langcode = NULL) {
+  public function view(FieldItemListInterface $items, $langcode = NULL): array {
     $elements = parent::view($items, $langcode);
     $gallery_type = $this->getSetting('gallery_type');
     $vertical_fit = $this->getSetting('vertical_fit');
@@ -155,9 +176,7 @@ class MagnificPopup extends ImageFormatterBase {
    * @return array
    *   An array of gallery types for use in display settings.
    */
-  protected function getGalleryTypes() {
-    // Render cache means 'random image' is only random the first time.
-    // Disabled until a better solution is found.
+  protected function getGalleryTypes(): array {
     return [
       'all_items' => $this->t('Gallery: All Items Displayed'),
       'first_item' => $this->t('Gallery: First Item Displayed'),
@@ -171,7 +190,7 @@ class MagnificPopup extends ImageFormatterBase {
    * @return array
    *   An array of values settings.
    */
-  protected function getVerticalFit() {
+  protected function getVerticalFit(): array {
     return [
       'true' => 'Fit image vertically (suitable for most images)',
       'false' => 'Fit image horizontally (suitable for very tall images)',
