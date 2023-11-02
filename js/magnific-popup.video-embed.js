@@ -4,7 +4,7 @@
 
   Drupal.behaviors.magnific_popup_video_embed_field = {
     attach: function (context) {
-      $(".mfp-video-embed-first-item, .mfp-video-embed-all-items", context).once("mfp-processed").each(function () {
+      $(once("mfp-processed", ".mfp-video-embed-first-item, .mfp-video-embed-all-items", context)).each(function () {
         var gallery_items = [];
 
         $(this).find(".mfp-video-embed-popup").each(function () {
@@ -26,7 +26,7 @@
       });
 
       $(".mfp-video-embed-separate-items", context).each(function () {
-        $(this).find(".mfp-video-embed-popup").once("mfp-processed").click(function (e) {
+        $(once("mfp-processed",".mfp-video-embed-popup", context)).click(function (e) {
           // Stop linking to video URL instead of showing popup.
           // See video-embed-field.colorbox.js in video_embed_field for more.
           e.preventDefault();

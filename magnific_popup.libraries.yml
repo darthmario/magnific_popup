@@ -12,7 +12,7 @@ magnific_popup:
   dependencies:
     - core/drupal
     - core/jquery
-    - core/jquery.once
+    - core/once
 video_embed_field:
   js:
     js/magnific-popup.video-embed.js: {}

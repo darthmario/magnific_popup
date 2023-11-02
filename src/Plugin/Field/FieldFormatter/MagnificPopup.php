@@ -107,7 +107,7 @@ class MagnificPopup extends ImageFormatterBase {
       // Either a class will need to be added to the $url object,
       // Or a custom theme function might be needed to do so.
       // For the time being, 'a' is used as the delegate in magnific-popup.js.
-      $url = Url::fromUri(file_create_url($popup_image_path));
+      $url = \Drupal::service('file_url_generator')->generate($popup_image_path);
       $item = $file->_referringItem;
       $item_attributes = $file->_attributes;
       unset($file->_attributes);

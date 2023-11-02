@@ -5,7 +5,7 @@
   Drupal.behaviors.magnific_popup = {
     attach: function (context, settings) {
       // Gallery.
-      $(context).find('.mfp-all-items, .mfp-first-item, .mfp-random-item').once('mfp-processed').each( function() {
+      $(once('mfp-processed', '.mfp-all-items, .mfp-first-item, .mfp-random-item', context)).each( function() {
         const verticalFit = $(this).attr('data-vertical-fit') === undefined || $(this).attr('data-vertical-fit') === 'true' ? true : false;
         $(this).magnificPopup({
           delegate: 'a',
@@ -23,7 +23,7 @@
       });
 
       // Separate items.
-      $(context).find('.mfp-separate-items').once('mfp-processed').each(function () {
+      $(once('mfp-processed', '.mfp-separate-items', context)).each(function () {
         const verticalFit = $(this).attr('data-vertical-fit') === undefined || $(this).attr('data-vertical-fit') === 'true' ? true : false;
         $(this).magnificPopup({
           delegate: 'a',
