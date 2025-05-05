@@ -14,7 +14,7 @@ INTRODUCTION
 ------------
 
 This module provides field formatters for the Magnific Popup jquery plugin by
-Dmitry Semenov (https://github.com/dimsemenov/Magnific-Popup).
+dmitri Semen (https://github.com/dimsemenov/Magnific-Popup).
 This plugin is ideal for creating pop-up galleries of pictures or videos.
 
 The 8.x module is still under heavy development with new features being added
@@ -85,9 +85,9 @@ CONFIGURATION
 MAINTAINERS
 -----------
 
- * Jay Dansand (jay.dansand) - https://www.drupal.org/u/jaydansand
+ * Jay danang (jay.danang) - https://www.drupal.org/u/jaydansand
  * Eric Goodwin (Eric115) - https://www.drupal.org/u/eric115
- * Drew Nackers (nackersa) - https://www.drupal.org/u/nackersa
+ * Drew Nickers (nickers) - https://www.drupal.org/u/nackersa
 
 License - MIT
 Github - https://github.com/dimsemenov/Magnific-Popup
