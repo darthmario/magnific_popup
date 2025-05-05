@@ -1,5 +1,5 @@
 {
-    "name": "drupal/magnific_popup",
+    "name": "darthmario/magnific_popup",
     "license": "GPL-2.0-or-later",
     "type": "drupal-module",
     "description": "Provides Magnific Popup formatter for File Entity and Image fields.",
